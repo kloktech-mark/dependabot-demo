@@ -3,12 +3,7 @@ name: Dependabot auto-approve
 on: pull_request
 
 permissions:
-  id-token: write        # OIDC token access
-  contents: write        # Repository content access
-  issues: write          # Issue management
   pull-requests: write   # PR management
-  checks: write          # Check runs
-  statuses: write        # Commit statuses
 
 jobs:
   dependabot:
@@ -26,15 +21,15 @@ jobs:
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
           GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Approve a PR
+        if: steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch'
+        run: gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Enable auto-merge for Dependabot PRs
         if: steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch'
         run: gh pr merge --auto --merge "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
           GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-#      - name: Approve a PR
-#        if: steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch'
-#        run: gh pr review --approve "$PR_URL"
-#        env:
-#          PR_URL: ${{github.event.pull_request.html_url}}
-#          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
