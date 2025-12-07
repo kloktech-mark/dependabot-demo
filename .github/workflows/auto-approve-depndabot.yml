@@ -2,13 +2,13 @@ name: Dependabot auto-approve
 # yamllint disable-line rule:truthy
 on: pull_request
 
-permissions:
-  issues: write
-  contents: write
-  pull-requests: write
 
 jobs:
   dependabot:
+    permissions:
+      issues: write
+      contents: write
+      pull-requests: write
     runs-on: ubuntu-latest
     if: github.event.pull_request.user.login == 'dependabot[bot]'
     steps:
