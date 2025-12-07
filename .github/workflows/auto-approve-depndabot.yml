@@ -9,6 +9,7 @@ permissions:
   pull-requests: write   # PR management
   checks: write          # Check runs
   statuses: write        # Commit statuses
+  workflow: write        
 
 jobs:
   dependabot:
